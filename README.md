@@ -19,7 +19,7 @@ endpoint for the project and build its API.
 ### Installation
 
 ```
-git clone git+ssh://git@github.com:strap/strap-sdk-go.git
+git clone git@github.com:strap/strap-sdk-go.git
 ```
 
 ### Usage
@@ -35,7 +35,7 @@ func getStrapSDK() *StrapSDK {
 }
 
 // Listen for ready before interacting with strapSDK
-func TestUsers(*testing.T) {
+func getUsers() {
 	s := getStrapSDK()
 
 	r, _ := s.Send("users", map[string]interface{}{})
