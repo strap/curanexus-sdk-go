@@ -1,4 +1,4 @@
-package strapSDK
+package strap
 
 import (
 	"bytes"
@@ -22,6 +22,34 @@ type (
 		Description string   `json:"description"`
 		Required    []string `json:"required,omitempty"`
 		Optional    []string `json:"optional,omitempty"`
+	}
+
+	Report struct {
+		ID        string `json:"id" bson:"_id"`
+		Timestamp int    `json:"timestamp" bson:"timestamp"`
+		Date      string `json:"date" bson:"date"`
+		Type      string `json:"type" bson:"type"`
+		Range     string `json:"range" bson:"range"`
+		Count     int    `json:"count" bson:"count"`
+		GUID      string `json:"guid" bson:"guid"`
+
+		Details   map[string]interface{} `json:"details" bson:"details"`
+		Aggregate []*Aggregate           `json:"aggregate" bson:"aggregate"`
+		Average   map[string]interface{} `json:"average,omitempty" bson:"average"`
+	}
+
+	Aggregate struct {
+		ID           string `json:"id" bson:"_id"`
+		Calories     int    `json:"calories" bson:"calories"`
+		Floors       int    `json:"floors" bson:"floors"`
+		Steps        int    `json:"steps" bson:"steps"`
+		ActiveMin    int    `json:"activeMinutes" bson:"activeMinutes"`
+		nonActiveMin string `json:"nonactiveMinutes" bson:"nonactiveMinutes"`
+	}
+
+	User struct {
+		GUID     string `json:"guid" bson:"guid"`
+		Platform string `json:"platform" bson:"platform"`
 	}
 )
 
@@ -90,5 +118,6 @@ func (r *Resource) Call(params map[string]interface{}) (io.ReadCloser, error) {
 		json.NewDecoder(res.Body).Decode(&e)
 		return nil, errors.New(e["code"].(string))
 	}
+
 	return res.Body, err
 }
