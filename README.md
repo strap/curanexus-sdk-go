@@ -40,36 +40,36 @@ func TestActivity(*testing.T) {
 	strap := getStrap()
 
 	r, _ := strap.getActivity(map[string]interface{}{"guid": "demo-guid"})
-	spew.Println("getActivity: %v", r)
+	spestrap.Println("getActivity: %v", r)
 }
 
 // List available endpoints
-r := w.endpoints()
+r := strap.endpoints()
 // No Params
 
 // Fetch a user's activity
 // URL resource: "guid"
 // Optional: "day", "count"
-r, _ := w.getActivity(map[string]interface{}{"guid": "brian-strap"})
+r, _ := strap.getActivity(map[string]interface{}{"guid": "brian-strap"})
 
 // Fetch a report's data
 // URL resource: "id"
 // Optional: none
-r, _ := w.getReport(map[string]interface{}{})
+r, _ := strap.getReport(map[string]interface{}{})
 
 // Fetch all user data for today
 // URL resource: none
 // Optional: "guid", "page"
-r, _ := w.getToday(map[string]interface{}{})
+r, _ := strap.getToday(map[string]interface{}{})
 
 // Fetch trigger data
 // URL resource: "id"
 // Optional: "count"
-r, _ := w.getTrigger(map[string]interface{}{})
+r, _ := strap.getTrigger(map[string]interface{}{})
 
 // Fetch a user list for the Project
 // URL resource: none
 // Optional: "platform", "count"
-r, _ := w.getUsers(map[string]interface{}{})
+r, _ := strap.getUsers(map[string]interface{}{})
 
 ```
