@@ -11,44 +11,44 @@ const (
 )
 
 func TestEndpoints(*testing.T) {
-	w := getStrap()
+	strap := getStrap()
 
-	r := w.endpoints()
+	r := strap.endpoints()
 	spew.Println("getActivity: %v", r)
 }
 
 func TestActivity(*testing.T) {
-	w := getStrap()
+	strap := getStrap()
 
-	r, _ := w.getActivity(map[string]interface{}{"guid": "demo-guid"})
+	r, _ := strap.getActivity(map[string]interface{}{"guid": "demo-guid"})
 	spew.Println("getActivity: %v", r)
 }
 
 func TestReport(*testing.T) {
-	w := getStrap()
+	strap := getStrap()
 
-	r, _ := w.getReport(map[string]interface{}{})
+	r, _ := strap.getReport(map[string]interface{}{})
 	spew.Println("get Report: %v", r)
 }
 
 func TestToday(*testing.T) {
-	w := getStrap()
+	strap := getStrap()
 
-	r, _ := w.getToday(map[string]interface{}{})
+	r, _ := strap.getToday(map[string]interface{}{})
 	spew.Println("getToday: %v", r)
 }
 
 func TestTrigger(*testing.T) {
-	w := getStrap()
+	strap := getStrap()
 
-	r, _ := w.getTrigger(map[string]interface{}{})
+	r, _ := strap.getTrigger(map[string]interface{}{})
 	spew.Println("getTrigger: %v", r)
 }
 
 func TestUsers(*testing.T) {
-	w := getStrap()
+	strap := getStrap()
 
-	r, _ := w.getUsers(map[string]interface{}{})
+	r, _ := strap.getUsers(map[string]interface{}{})
 	spew.Println("getUsers: %v", r)
 }
 

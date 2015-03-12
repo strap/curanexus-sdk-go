@@ -34,29 +34,42 @@ func getStrap() *Strap {
 	return strap
 }
 
+// Example usage of Strap
+// Checkout the strap_test.go file for more information
+func TestActivity(*testing.T) {
+	strap := getStrap()
+
+	r, _ := strap.getActivity(map[string]interface{}{"guid": "demo-guid"})
+	spew.Println("getActivity: %v", r)
+}
+
+// List available endpoints
+r := w.endpoints()
+// No Params
+
 // Fetch a user's activity
 // URL resource: "guid"
 // Optional: "day", "count"
-w.getActivity(map[string]interface{}{"guid": "brian-strap"})
+r, _ := w.getActivity(map[string]interface{}{"guid": "brian-strap"})
 
 // Fetch a report's data
 // URL resource: "id"
 // Optional: none
-w.getReport(map[string]interface{}{})
+r, _ := w.getReport(map[string]interface{}{})
 
 // Fetch all user data for today
 // URL resource: none
 // Optional: "guid", "page"
-w.getToday(map[string]interface{}{})
+r, _ := w.getToday(map[string]interface{}{})
 
 // Fetch trigger data
 // URL resource: "id"
 // Optional: "count"
-w.getTrigger(map[string]interface{}{})
+r, _ := w.getTrigger(map[string]interface{}{})
 
 // Fetch a user list for the Project
 // URL resource: none
 // Optional: "platform", "count"
-w.getUsers(map[string]interface{}{})
+r, _ := w.getUsers(map[string]interface{}{})
 
 ```
