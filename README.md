@@ -1,4 +1,4 @@
-# strapSDK
+# Go > Strap Server-Side SDK
 
 Strap SDK Go provides an easy to use, chainable API for interacting with our
 API services.  Its purpose is to abstract away resource information from
@@ -26,22 +26,37 @@ git clone git@github.com:strap/strap-sdk-go.git
 
 Below is a basic use case.
 
-```javascript
-// Setup strapSDK, passing in the Read Token for the Project
-func getStrapSDK() *StrapSDK {
-	strap := New("token value")	// 
+```golang
+// Setup strap, passing in the Read Token for the Project
+func getStrap() *Strap {
+	strap := New(token)
 	strap.Discover()
 	return strap
 }
 
-// Listen for ready before interacting with strapSDK
-func getUsers() {
-	s := getStrapSDK()
+// Fetch a user's activity
+// URL resource: "guid"
+// Optional: "day", "count"
+w.getActivity(map[string]interface{}{"guid": "brian-strap"})
 
-	r, _ := s.Send("users", map[string]interface{}{})
-	defer r.Close()
-	m := []map[string]interface{}{}
-	json.NewDecoder(r).Decode(&m)
-	fmt.Println(m)
-}
+// Fetch a report's data
+// URL resource: "id"
+// Optional: none
+w.getReport(map[string]interface{}{})
+
+// Fetch all user data for today
+// URL resource: none
+// Optional: "guid", "page"
+w.getToday(map[string]interface{}{})
+
+// Fetch trigger data
+// URL resource: "id"
+// Optional: "count"
+w.getTrigger(map[string]interface{}{})
+
+// Fetch a user list for the Project
+// URL resource: none
+// Optional: "platform", "count"
+w.getUsers(map[string]interface{}{})
+
 ```
