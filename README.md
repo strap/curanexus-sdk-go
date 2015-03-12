@@ -40,7 +40,7 @@ func TestActivity(*testing.T) {
 	strap := getStrap()
 
 	r, _ := strap.getActivity(map[string]interface{}{"guid": "demo-guid"})
-	spestrap.Println("getActivity: %v", r)
+	// etc...
 }
 
 // List available endpoints
