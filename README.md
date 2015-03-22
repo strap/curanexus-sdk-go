@@ -52,6 +52,11 @@ r := strap.endpoints()
 // Optional: "day", "count"
 r, _ := strap.getActivity(map[string]interface{}{"guid": "brian-strap"})
 
+// Fetch all user data for month
+// URL resource: none
+// Optional: "guid", "page", "per_page"
+r, _ := strap.getMonth(map[string]interface{}{})
+
 // Fetch a report's data
 // URL resource: "id"
 // Optional: none
@@ -59,7 +64,7 @@ r, _ := strap.getReport(map[string]interface{}{})
 
 // Fetch all user data for today
 // URL resource: none
-// Optional: "guid", "page"
+// Optional: "guid", "page", "per_page"
 r, _ := strap.getToday(map[string]interface{}{})
 
 // Fetch trigger data
@@ -71,5 +76,10 @@ r, _ := strap.getTrigger(map[string]interface{}{})
 // URL resource: none
 // Optional: "platform", "count"
 r, _ := strap.getUsers(map[string]interface{}{})
+
+// Fetch all user data for week
+// URL resource: none
+// Optional: "guid", "page", "per_page"
+r, _ := strap.getWeek(map[string]interface{}{})
 
 ```
