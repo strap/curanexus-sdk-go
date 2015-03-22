@@ -54,6 +54,25 @@ func (w *Strap) getActivity(params map[string]interface{}) ([]*Report, error) {
 	return tt, errors.New("Could not find resource.")
 }
 
+func (w *Strap) getMonth(params map[string]interface{}) ([]*Report, error) {
+
+	tt := []*Report{}
+
+	if w.resources["month"] != nil {
+		// Set the Token value
+		w.resources["month"].Token = w.token
+
+		dd, err := w.resources["month"].Call(params)
+
+		if err == nil {
+			json.NewDecoder(dd).Decode(&tt)
+			return tt, nil
+		}
+		return tt, err
+	}
+	return tt, errors.New("Could not find resource.")
+}
+
 func (w *Strap) getReport(params map[string]interface{}) (Report, error) {
 
 	tt := Report{}
@@ -128,6 +147,25 @@ func (w *Strap) getUsers(params map[string]interface{}) ([]*User, error) {
 		return tt, err
 	}
 	return nil, errors.New("Could not find resource.")
+}
+
+func (w *Strap) getWeek(params map[string]interface{}) ([]*Report, error) {
+
+	tt := []*Report{}
+
+	if w.resources["week"] != nil {
+		// Set the Token value
+		w.resources["week"].Token = w.token
+
+		dd, err := w.resources["week"].Call(params)
+
+		if err == nil {
+			json.NewDecoder(dd).Decode(&tt)
+			return tt, nil
+		}
+		return tt, err
+	}
+	return tt, errors.New("Could not find resource.")
 }
 
 func requestEncode(url string, token string, v interface{}) {
