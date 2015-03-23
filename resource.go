@@ -87,8 +87,16 @@ type (
 	}
 )
 
+func (r *Resource) getAll(params map[string]interface{}) (io.ReadCloser, error) {
+
+}
+
+func (r *Resource) next(params map[string]interface{}) (io.ReadCloser, error) {
+
+}
+
 // Call invokes an operation on the resource.
-func (r *Resource) Get(params map[string]interface{}) (io.ReadCloser, error) {
+func (r *Resource) get(params map[string]interface{}) (io.ReadCloser, error) {
 
 	// Verify method is valid
 	if r.Method == "" {
