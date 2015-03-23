@@ -29,22 +29,56 @@ type (
 		Timestamp int    `json:"timestamp" bson:"timestamp"`
 		Date      string `json:"date" bson:"date"`
 		Type      string `json:"type" bson:"type"`
-		Range     string `json:"range" bson:"range"`
-		Count     int    `json:"count" bson:"count"`
 		GUID      string `json:"guid" bson:"guid"`
 
-		Details   map[string]interface{} `json:"details" bson:"details"`
-		Aggregate []*Aggregate           `json:"aggregate" bson:"aggregate"`
-		Average   map[string]interface{} `json:"average,omitempty" bson:"average"`
+		Activity Activities `json:"activity" bson:"activity"`
+		Food     Food       `json:"food" bson:"food"`
+		Body     Body       `json:"body" bson:"body"`
+		Sleep    Sleep      `json:"sleep" bson:"sleep"`
+
+		Average    Averages      `json:"average,omitempty" bson:"average"`
+		Components []*Activities `json:"components,omitempty" bson:"components"`
 	}
 
-	Aggregate struct {
-		ID           string `json:"id" bson:"_id"`
+	Averages struct {
 		Calories     int    `json:"calories" bson:"calories"`
 		Floors       int    `json:"floors" bson:"floors"`
 		Steps        int    `json:"steps" bson:"steps"`
 		ActiveMin    int    `json:"activeMinutes" bson:"activeMinutes"`
 		nonActiveMin string `json:"nonactiveMinutes" bson:"nonactiveMinutes"`
+		Updated      string `json:"updated" bson:"updated"`
+	}
+
+	Activities struct {
+		Calories     int    `json:"calories" bson:"calories"`
+		Floors       int    `json:"floors" bson:"floors"`
+		Steps        int    `json:"steps" bson:"steps"`
+		ActiveMin    int    `json:"activeMinutes" bson:"activeMinutes"`
+		nonActiveMin string `json:"nonactiveMinutes" bson:"nonactiveMinutes"`
+		Updated      string `json:"updated" bson:"updated"`
+	}
+
+	Body struct {
+		BMI     string `json:"bmi" bson:"bmi"`
+		BodyFat int    `json:"bodyFat" bson:"bodyFat"`
+		Weight  string `json:"weight" bson:"weight"`
+	}
+
+	Food struct {
+		Calories int    `json:"calories" bson:"calories"`
+		Carbs    string `json:"carbs" bson:"carbs"`
+		Fat      string `json:"fat" bson:"fat"`
+		Fiber    string `json:"fiber" bson:"fiber"`
+		Protein  string `json:"protein" bson:"protein"`
+		Sodium   string `json:"sodium" bson:"sodium"`
+		Water    int    `json:"water" bson:"water"`
+	}
+
+	Sleep struct {
+		Asleep   int `json:"asleep" bson:"asleep"`
+		Awake    int `json:"awake" bson:"awake"`
+		Duration int `json:"duration" bson:"duration"`
+		Start    int `json:"start" bson:"start"`
 	}
 
 	User struct {
@@ -54,7 +88,7 @@ type (
 )
 
 // Call invokes an operation on the resource.
-func (r *Resource) Call(params map[string]interface{}) (io.ReadCloser, error) {
+func (r *Resource) Get(params map[string]interface{}) (io.ReadCloser, error) {
 
 	// Verify method is valid
 	if r.Method == "" {
