@@ -16,6 +16,8 @@ GET [https://api2.straphq.com/discover]([https://api2.straphq.com/discover)
 Once the above has been fetched, `strapSDK` will fetch the API discover
 endpoint for the project and build its API.
 
+*Checkout the strap_test.go file for all SDK endpoint examples*
+
 ### Installation
 
 ```
@@ -34,52 +36,32 @@ func getStrap() *Strap {
 	return strap
 }
 
-// Example usage of Strap
-// Checkout the strap_test.go file for more information
-func TestActivity(*testing.T) {
-	strap := getStrap()
-
-	r, _ := strap.getActivity(map[string]interface{}{"guid": "demo-guid"})
-	// etc...
-}
-
 // List available endpoints
 r := strap.endpoints()
 // No Params
 
-// Fetch a user's activity
-// URL resource: "guid"
-// Optional: "day", "count"
-r, _ := strap.getActivity(map[string]interface{}{"guid": "brian-strap"})
+// Example usage of Strap
+// Checkout the strap_test.go file for more information
+func TestActivity(*testing.T) {
+    strap := getStrap()
 
-// Fetch all user data for month
-// URL resource: none
-// Optional: "guid", "page", "per_page"
-r, _ := strap.getMonth(map[string]interface{}{})
+    q := Request{
+        Name:   "activity",
+        Method: "GET",
+        Params: Query{
+            "guid": "user-guid",
+        },
+    }
 
-// Fetch a report's data
-// URL resource: "id"
-// Optional: none
-r, _ := strap.getReport(map[string]interface{}{})
+    reports := []*Report{}
 
-// Fetch all user data for today
-// URL resource: none
-// Optional: "guid", "page", "per_page"
-r, _ := strap.getToday(map[string]interface{}{})
+    // Get Activity Reports by Page
+    res, err := strap.Call(q, &reports)
+    strap.debug.Log("Activity:", reports, res, err)
 
-// Fetch trigger data
-// URL resource: "id"
-// Optional: "count"
-r, _ := strap.getTrigger(map[string]interface{}{})
-
-// Fetch a user list for the Project
-// URL resource: none
-// Optional: "platform", "count"
-r, _ := strap.getUsers(map[string]interface{}{})
-
-// Fetch all user data for week
-// URL resource: none
-// Optional: "guid", "page", "per_page"
-r, _ := strap.getWeek(map[string]interface{}{})
+    // Get all Activity Reports
+    res, err = strap.All(q, &reports)
+    strap.debug.Log("All Activity:", reports, res, err)
+}
 
 ```
