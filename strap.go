@@ -5,14 +5,32 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"strconv"
+	"strings"
+
+	"github.com/swhite24/go-debug"
 )
 
 type (
 	// Strap organizes the resources
 	Strap struct {
 		token     string
-		resources map[string]*Resource
+		resources map[string]*[]*Resource
+		debug     debugger.Debugger
 	}
+
+	Result struct {
+		StatusCode int
+		Header     http.Header
+	}
+
+	Request struct {
+		Name   string
+		Method string
+		Params Query
+	}
+
+	Query map[string]string
 )
 
 const (
@@ -21,153 +39,132 @@ const (
 
 // New delivers a new strapSDK instances with the token setup.
 func New(token string) *Strap {
-	fmt.Println("Strap SDK setup and using token: " + token)
-	return &Strap{token: token}
+	return &Strap{
+		token: token,
+		debug: debugger.NewDebugger("strap:strap"),
+	}
 }
 
 // Discover instructs strapSDK to perform the initial discovery
 func (w *Strap) Discover() {
 	requestEncode(discoveryURL, w.token, &w.resources)
-	// fmt.Println(w.resources)
+
 }
 
-func (w *Strap) endpoints() map[string]*Resource {
+func (w *Strap) endpoints() map[string]*[]*Resource {
 	return w.resources
 }
 
-func (w *Strap) getActivity(params map[string]interface{}) ([]*Report, error) {
+func (w *Strap) Call(req Request, v interface{}) (*Result, error) {
 
-	tt := []*Report{}
+	// Check the avialability
+	resource, err := w.checkResource(&req)
 
-	if w.resources["activity"] != nil {
-		// Set the Token value
-		w.resources["activity"].Token = w.token
-
-		dd, err := w.resources["activity"].Call(params)
-
-		if err == nil {
-			json.NewDecoder(dd).Decode(&tt)
-			return tt, nil
-		}
-		return tt, err
-	}
-	return tt, errors.New("Could not find resource.")
-}
-
-func (w *Strap) getMonth(params map[string]interface{}) ([]*Report, error) {
-
-	tt := []*Report{}
-
-	if w.resources["month"] != nil {
-		// Set the Token value
-		w.resources["month"].Token = w.token
-
-		dd, err := w.resources["month"].Call(params)
-
-		if err == nil {
-			json.NewDecoder(dd).Decode(&tt)
-			return tt, nil
-		}
-		return tt, err
-	}
-	return tt, errors.New("Could not find resource.")
-}
-
-func (w *Strap) getReport(params map[string]interface{}) (Report, error) {
-
-	tt := Report{}
-
-	if w.resources["report"] != nil {
-		// Set the Token value
-		w.resources["report"].Token = w.token
-
-		dd, err := w.resources["report"].Call(params)
-
-		if err == nil {
-			json.NewDecoder(dd).Decode(&tt)
-			return tt, nil
-		}
-		return tt, err
-	}
-	return tt, errors.New("Could not find resource.")
-}
-
-func (w *Strap) getToday(params map[string]interface{}) ([]*Report, error) {
-
-	tt := []*Report{}
-
-	if w.resources["today"] != nil {
-		// Set the Token value
-		w.resources["today"].Token = w.token
-
-		dd, err := w.resources["today"].Call(params)
-
-		if err == nil {
-			json.NewDecoder(dd).Decode(&tt)
-			return tt, nil
-		}
+	if err != nil {
 		return nil, err
 	}
-	return tt, errors.New("Could not find resource.")
+
+	// Make sure the method is upper case
+	req.Method = strings.ToUpper(req.Method)
+
+	// Get the information
+	data, res, err := resource.DoIt(req.Method, w.token, req.Params)
+
+	w.debug.Log(data)
+
+	if err == nil {
+		json.NewDecoder(data).Decode(&v)
+		return res, nil
+	}
+
+	return res, err
+
 }
 
-func (w *Strap) getTrigger(params map[string]interface{}) ([]*Report, error) {
+func (w *Strap) All(req Request, v interface{}) (*Result, error) {
 
-	tt := []*Report{}
+	// Holder
+	reports := []*Report{}
 
-	if w.resources["trigger"] != nil {
-		// Set the Token value
-		w.resources["trigger"].Token = w.token
+	// Kick start everything..
+	res, err := w.Call(req, &reports)
 
-		dd, err := w.resources["trigger"].Call(params)
+	//Page values
+	cur_page := 1
+	if len(res.Header["X-Page"]) != 0 {
+		cur_page, _ = strconv.Atoi(res.Header["X-Page"][0])
+	}
+
+	tot_page := 1
+	if len(res.Header["X-Pages"]) != 0 {
+		tot_page, _ = strconv.Atoi(res.Header["X-Pages"][0])
+	}
+
+	w.debug.Log("first reports", req, reports)
+
+	for cur_page < tot_page {
+
+		reports_temp := []*Report{}
+
+		// bump the page
+		cur_page++
+
+		// Set the Next page on Req
+		req.Params["page"] = strconv.Itoa(cur_page)
+
+		w.debug.Log("next reports", cur_page, req, reports_temp)
+
+		res, err = w.Call(req, &reports_temp)
 
 		if err == nil {
-			json.NewDecoder(dd).Decode(&tt)
-			return tt, nil
+			for _, r := range reports_temp {
+				reports = append(reports, r)
+			}
 		}
-		return tt, err
+
+		cur_page, _ = strconv.Atoi(res.Header["X-Page"][0])
+		tot_page, _ = strconv.Atoi(res.Header["X-Pages"][0])
 	}
-	return nil, errors.New("Could not find resource.")
+
+	w.debug.Log("final reports", reports)
+
+	reports_temp, _ := json.Marshal(reports)
+
+	json.Unmarshal(reports_temp, v)
+
+	return res, err
+
 }
 
-func (w *Strap) getUsers(params map[string]interface{}) ([]*User, error) {
+// Pull our the resource+method combination
+func (w *Strap) checkResource(req *Request) (*Resource, error) {
 
-	tt := []*User{}
-
-	if w.resources["users"] != nil {
-		// Set the Token value
-		w.resources["users"].Token = w.token
-
-		dd, err := w.resources["users"].Call(params)
-
-		if err == nil {
-			json.NewDecoder(dd).Decode(&tt)
-			return tt, nil
+	for key, r := range w.resources {
+		for _, rr := range *r {
+			if key == req.Name && rr.Method == strings.ToUpper(req.Method) {
+				return rr, nil
+			}
 		}
-		return tt, err
 	}
-	return nil, errors.New("Could not find resource.")
+	return nil, errors.New("Invalid resource or method")
 }
 
-func (w *Strap) getWeek(params map[string]interface{}) ([]*Report, error) {
+// Check Pagination
+func (w *Strap) pagination(res *Resource) bool {
 
-	tt := []*Report{}
-
-	if w.resources["week"] != nil {
-		// Set the Token value
-		w.resources["week"].Token = w.token
-
-		dd, err := w.resources["week"].Call(params)
-
-		if err == nil {
-			json.NewDecoder(dd).Decode(&tt)
-			return tt, nil
-		}
-		return tt, err
+	if res.Optional == nil {
+		return false
 	}
-	return tt, errors.New("Could not find resource.")
+
+	for _, val := range res.Optional {
+		if val == "page" {
+			return true
+		}
+	}
+	return false
 }
 
+// Get the Discovery
 func requestEncode(url string, token string, v interface{}) {
 
 	// fmt.Println(token)
