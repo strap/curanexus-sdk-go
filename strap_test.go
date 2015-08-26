@@ -86,6 +86,25 @@ func TestJob(*testing.T) {
 
 }
 
+func TestJobData(*testing.T) {
+	strap := getStrap()
+
+	q := Request{
+		Name:   "job",
+		Method: "GET",
+		Params: Query{
+			"id": "job-id",
+		},
+	}
+
+	job := JobData{}
+
+	// Get All Jobs
+	res, err := strap.Call(q, &job)
+	strap.debug.Log("Jobs Data:", job, res, err)
+
+}
+
 func TestMonth(*testing.T) {
 	strap := getStrap()
 
@@ -158,6 +177,25 @@ func TestToday(*testing.T) {
 	strap.debug.Log("All Today:", reports, res, err)
 }
 
+func TestTrend(*testing.T) {
+	strap := getStrap()
+
+	q := Request{
+		Name:   "trend",
+		Method: "GET",
+		Params: Query{
+			"guid": "user-guid",
+		},
+	}
+
+	trend := Trend{}
+
+	// Get Trend
+	res, err := strap.Call(q, &trend)
+	strap.debug.Log("Trend:", trend, res, err)
+
+}
+
 func TestTrigger(*testing.T) {
 	strap := getStrap()
 
@@ -170,6 +208,25 @@ func TestTrigger(*testing.T) {
 	}
 
 	trigger := Trigger{}
+
+	// Get Trigger by ID
+	res, err := strap.Call(q, &trigger)
+	strap.debug.Log("Trigger:", trigger, res, err)
+
+}
+
+func TestTriggerData(*testing.T) {
+	strap := getStrap()
+
+	q := Request{
+		Name:   "trigger_data",
+		Method: "GET",
+		Params: Query{
+			"id": "trigger-id",
+		},
+	}
+
+	trigger := TriggerData{}
 
 	// Get Trigger by ID
 	res, err := strap.Call(q, &trigger)

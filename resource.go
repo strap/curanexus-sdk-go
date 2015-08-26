@@ -93,14 +93,31 @@ type (
 		Platform string `json:"platform" bson:"platform"`
 	}
 
-	Segmentation map[string]interface{}
-
+	// Trigger represents the Trigger structure
 	Trigger struct {
-		ID         string `json:"id" bson:"_id,omitempty"`
-		Key        string `json:"key" bson:"key"`
-		Range      string `json:"range" bson:"range"`
-		ActionType string `json:"actionType" bson:"actionType"`
-		ActionURL  string `json:"actionUrl" bson:"actionUrl"`
+		ID         string       `json:"id" bson:"_id,omitempty"`
+		Active     bool         `json:"active" bson:"active"`
+		Name       string       `json:"name" bson:"name"`
+		Type       string       `json:"type" bson:"type"`
+		Key        string       `json:"key" bson:"key"`
+		Range      string       `json:"range" bson:"range"`
+		Created    time.Time    `json:"created" bson:"created"`
+		Conditions []*Condition `json:"conditions" bson:"conditions"`
+		ActionType string       `json:"actionType" bson:"actionType"`
+		ActionURL  string       `json:"actionUrl" bson:"actionUrl"`
+	}
+
+	// Condition is the entire state necessary to trigger an ActionType event
+	Condition struct {
+		Section    string `json:"section" bson:"section"`
+		Field      string `json:"field" bson:"field"`
+		Comparison string `json:"comparison" bson:"comparison"`
+		Threshold  int    `json:"threshold" bson:"threshold"`
+	}
+
+	TriggerData struct {
+		Key   string  `json:"key" bson:"key"`
+		Users []*User `json:"users" bson:"users"`
 	}
 
 	Job struct {
@@ -121,6 +138,12 @@ type (
 		Status    string    `json:"status" bson:"status"`
 		UpdatedAt time.Time `json:"updatedAt" bson:"updatedAt"`
 	}
+
+	Segmentation map[string]interface{}
+
+	Trend map[string]interface{}
+
+	JobData map[string]interface{}
 )
 
 // Call invokes an operation on the resource.
