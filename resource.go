@@ -34,19 +34,19 @@ type (
 		Type      string `json:"type" bson:"type"`
 		GUID      string `json:"guid" bson:"guid"`
 
-		Activity Activities `json:"activity" bson:"activity"`
-		Food     Food       `json:"food" bson:"food"`
-		Body     Body       `json:"body" bson:"body"`
-		Sleep    Sleep      `json:"sleep" bson:"sleep"`
+		Activity ReportActivities `json:"activity" bson:"activity"`
+		Food     ReportFood       `json:"food" bson:"food"`
+		Body     ReportBody       `json:"body" bson:"body"`
+		Sleep    ReportSleep      `json:"sleep" bson:"sleep"`
 
-		Average    Averages      `json:"average,omitempty" bson:"average"`
-		AvgFood    Food          `json:"avgfood" bson:"avgfood"`
-		AvgBody    Body          `json:"avgbody" bson:"avgbody"`
-		AvgSleep   Sleep         `json:"avgsleep" bson:"avgsleep"`
-		Components []*Activities `json:"components,omitempty" bson:"components"`
+		Average    ReportAverages      `json:"average,omitempty" bson:"average"`
+		AvgFood    ReportFood          `json:"avgfood" bson:"avgfood"`
+		AvgBody    ReportBody          `json:"avgbody" bson:"avgbody"`
+		AvgSleep   ReportSleep         `json:"avgsleep" bson:"avgsleep"`
+		Components []*ReportActivities `json:"components,omitempty" bson:"components"`
 	}
 
-	Averages struct {
+	ReportAverages struct {
 		Calories     int    `json:"calories" bson:"calories"`
 		Floors       int    `json:"floors" bson:"floors"`
 		Steps        int    `json:"steps" bson:"steps"`
@@ -55,7 +55,7 @@ type (
 		Updated      string `json:"updated" bson:"updated"`
 	}
 
-	Activities struct {
+	ReportActivities struct {
 		Calories     int    `json:"calories" bson:"calories"`
 		Floors       int    `json:"floors" bson:"floors"`
 		Steps        int    `json:"steps" bson:"steps"`
@@ -64,13 +64,13 @@ type (
 		Updated      string `json:"updated" bson:"updated"`
 	}
 
-	Body struct {
+	ReportBody struct {
 		BMI     string `json:"bmi" bson:"bmi"`
 		BodyFat int    `json:"bodyFat" bson:"bodyFat"`
 		Weight  string `json:"weight" bson:"weight"`
 	}
 
-	Food struct {
+	ReportFood struct {
 		Calories int    `json:"calories" bson:"calories"`
 		Carbs    string `json:"carbs" bson:"carbs"`
 		Fat      string `json:"fat" bson:"fat"`
@@ -80,7 +80,7 @@ type (
 		Water    int    `json:"water" bson:"water"`
 	}
 
-	Sleep struct {
+	ReportSleep struct {
 		Asleep   int `json:"asleep" bson:"asleep"`
 		Awake    int `json:"awake" bson:"awake"`
 		Duration int `json:"duration" bson:"duration"`
@@ -144,6 +144,73 @@ type (
 	Trend map[string]interface{}
 
 	JobData map[string]interface{}
+
+	Workout struct {
+		ID        string `json:"id" bson:"_id"`
+		Date      string `json:"date" bson:"date"`
+		CreatedAt int64  `json:"createdAt" bson:"createdAt"`
+		UpdatedAt int64  `json:"updatedAt" bson:"updatedAt"`
+
+		Name        string `json:"name" bson:"name"`
+		Description string `json:"description" bson:"description"`
+		Type        string `json:"type" bson:"type"`
+		StartTime   int64  `json:"startTime" bson:"startTime"`
+
+		Country  string   `json:"country" bson:"country"`
+		State    string   `json:"state" bson:"state"`
+		City     string   `json:"city" bson:"city"`
+		StartLoc []string `json:"startLoc" bson:"startLoc"`
+		EndLoc   []string `json:"endLoc" bson:"endLoc"`
+
+		Distance float64 `json:"distance" bson:"distance"`
+		Steps    int     `json:"steps" bson:"steps"`
+		Calories int     `json:"calories" bson:"calories"`
+
+		ActiveMinutes    int     `json:"activeMinutes" bson:"activeMinutes"`
+		NonactiveMinutes int     `json:"nonactiveMinutes" bson:"nonactiveMinutes"`
+		MovingTime       int     `json:"movingTime" bson:"movingTime"`
+		ElapsedTime      int     `json:"elapsedTime" bson:"elapsedTime"`
+		AvgHeartRate     float64 `json:"avgHeartRate" bson:"avgHeartRate"`
+		MaxHeartRate     float64 `json:"maxHeartRate" bson:"maxHeartRate"`
+		AvgSpeed         float64 `json:"avgSpeed" bson:"avgSpeed"`
+		MaxSpeed         float64 `json:"maxSpeed" bson:"maxSpeed"`
+		AvgTemp          float64 `json:"avgTemp" bson:"avgTemp"`
+	}
+
+	Food struct {
+		ID        string `json:"id" bson:"_id"`
+		Date      string `json:"date" bson:"date"`
+		CreatedAt int64  `json:"createdAt" bson:"createdAt"`
+		UpdatedAt int64  `json:"updatedAt" bson:"updatedAt"`
+
+		Name     string `json:"name" bson:"name"`
+		Brand    string `json:"brand" bson:"brand"`
+		Amount   string `json:"amount" bson:"amount"`
+		Unit     string `json:"unit" bson:"unit"`
+		MealType string `json:"mealType" bson:"mealType"`
+		Barcode  string `json:"barcode" bson:"barcode"`
+
+		Calories int     `json:"calories" bson:"calories"`
+		Carbs    float64 `json:"carbs" bson:"carbs"`
+		Fat      float64 `json:"fat" bson:"fat"`
+		Fiber    float64 `json:"fiber" bson:"fiber"`
+		Protein  float64 `json:"protein" bson:"protein"`
+		Sodium   float64 `json:"sodium" bson:"sodium"`
+		Water    float64 `json:"water" bson:"water"`
+
+		TransFat       float64 `json:"transFat" bson:"transFat"`
+		SaturatedFat   float64 `json:"saturatedFat" bson:"saturatedFat"`
+		UnsaturatedFat float64 `json:"unsaturatedFat" bson:"unsaturatedFat"`
+		MonoFat        float64 `json:"monoFat" bson:"monoFat"`
+		PolyFat        float64 `json:"polyFat" bson:"polyFat"`
+		VitaminC       float64 `json:"vitaminC" bson:"vitaminC"`
+		VitaminA       float64 `json:"vitaminA" bson:"vitaminA"`
+		Sugar          float64 `json:"sugar" bson:"sugar"`
+		Potassium      float64 `json:"potassium" bson:"potassium"`
+		Calcium        float64 `json:"calcium" bson:"calcium"`
+		Iron           float64 `json:"iron" bson:"iron"`
+		Cholesterol    float64 `json:"cholesterol" bson:"cholesterol"`
+	}
 )
 
 // Call invokes an operation on the resource.
