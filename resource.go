@@ -145,6 +145,8 @@ type (
 
 	JobData map[string]interface{}
 
+	WordCloud map[string]interface{}
+
 	Workout struct {
 		ID        string `json:"id" bson:"_id"`
 		Date      string `json:"date" bson:"date"`
