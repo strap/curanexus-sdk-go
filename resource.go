@@ -145,7 +145,14 @@ type (
 
 	JobData map[string]interface{}
 
-	WordCloud map[string]interface{}
+	WordCloud struct {
+		GUID    string                 `json:"guid,omitempty"`
+		Food    map[string]interface{} `json:"food,omitempty" bson:"food"`
+		Foods   map[string]interface{} `json:"foods,omitempty" bson:"foods"`
+		Workout map[string]interface{} `json:"workout,omitempty" bson:"workout"`
+		Brand   map[string]interface{} `json:"brand,omitempty" bson:"brand"`
+		Recipe  map[string]interface{} `json:"recipe,omitempty" bson:"recipe"`
+	}
 
 	Workout struct {
 		ID        string `json:"id" bson:"_id"`
