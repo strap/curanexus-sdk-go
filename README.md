@@ -11,7 +11,7 @@ The Strap SDK Go extracts the need for developers to know, manage, and integrate
 The a Project API discovery can be found here:
 
 HEADERS: "X-Auth-Token": 
-GET [https://api2.straphq.com/discover](https://api2.straphq.com/discover)
+GET [https://api.curanexus.io/discover](https://api.curanexus.io/discover)
 
 Once the above has been fetched, `strapSDK` will fetch the API discover
 endpoint for the project and build its API.

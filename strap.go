@@ -34,7 +34,7 @@ type (
 )
 
 const (
-	discoveryURL = "https://api2.straphq.com/discover"
+	discoveryURL = "https://api.curanexus.io/discover"
 )
 
 // New delivers a new strapSDK instances with the token setup.
